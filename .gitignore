@@ -25,3 +25,5 @@ hs_err_pid*
 .idea/
 
 SecurityWorld3.iml
+
+target/classes/
