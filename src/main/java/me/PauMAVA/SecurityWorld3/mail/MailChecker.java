@@ -1,5 +1,7 @@
 package me.PauMAVA.SecurityWorld3.mail;
 
+import me.PauMAVA.SecurityWorld3.SC3;
+
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
@@ -15,6 +17,8 @@ public class MailChecker implements Runnable {
     private static final String SMTP_PROPERTIES = "/smtp.properties";
     private static final String PROTOCOL = "imaps";
 
+    private SC3 core;
+
     private MailSender sender;
 
     private Session session;
@@ -23,7 +27,8 @@ public class MailChecker implements Runnable {
 
     private volatile boolean listen = false;
 
-    public MailChecker(MailSender sender) {
+    public MailChecker(SC3 core, MailSender sender) {
+        this.core = core;
         this.sender = sender;
         Properties properties = new Properties();
         try {
@@ -59,23 +64,29 @@ public class MailChecker implements Runnable {
             } catch (MessagingException | IOException e) {
                 e.printStackTrace();
             }
-            sleep(10);
+            sleep(1);
         }
     }
 
     private void processMessage(Message message) throws MessagingException, IOException {
         String text = getMessageText(message);
         String elegibleQuery = text.split("\n")[0];
-        //TODO Handle SQL Request
+        System.out.println(elegibleQuery);
+        String response = core.getSqlapi().executeStatement("SELECT * FROM usernames WHERE user_id = " + elegibleQuery);
+        if (response == null || response.isEmpty()) {
+            response = "No such user with id:" + elegibleQuery + "...";
+        }
         Address[] to = message.getFrom();
         System.out.println("Recieved email: " + message.getSubject() + "\n - From: " + Arrays.toString(to) + "\n - Content: " + text);
 
-        sender.sendMail(to, "WW91ciBxdWVyeSByZXN1bHRz==", "ACK");
+        sender.sendMail(to, "WW91ciBxdWVyeSByZXN1bHRz==", response);
     }
 
     private String getMessageText(Message message) throws IOException, MessagingException {
         if (message.isMimeType("text/plain")) {
             return message.getContent().toString();
+        } else if (message.isMimeType("text/html")) {
+           return extractFromHtml((String) message.getContent());
         } else if (message.isMimeType("multipart/*")) {
             return extractFromMultipart((MimeMultipart) message.getContent());
         }
@@ -93,6 +104,10 @@ public class MailChecker implements Runnable {
             }
         }
         return sb.toString();
+    }
+
+    private String extractFromHtml(String html) {
+        return org.jsoup.Jsoup.parse(html).text();
     }
 
 

@@ -31,7 +31,7 @@ public class MailSender {
     public boolean sendPhase1Mail(String address) {
         try {
             InternetAddress[] internetAddress = InternetAddress.parse(address);
-            return sendMail(internetAddress, "WELCOME TO OUR DATABASE!", "");
+            return sendMail(internetAddress, "VXNlcm5hbWUgZm9yZ290dGVuIHJlcXVlc3Qu==", "V2VsY29tZSB0byBvdXIgdXNlciBkYXRhYmFzZSEKClBsZWFzZSByZXNwb25kIHdpdGggeW91ciB1c2VyIGlkIHRvIHJldHJpZXZlIHlvdXIgY3VycmVudCB1c2VybmFtZSEKClJlc3BvbnNlIHRpbWUgaXMgYWJvdXQgMzAgc2Vjb25kcy4=");
         } catch (AddressException e) {
             e.printStackTrace();
         }
