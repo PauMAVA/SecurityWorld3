@@ -23,7 +23,7 @@ public class UpdateHandler {
             telegramBotCore.sendMessage(chatId, "SW50cm9kdWNlIHlvdXIgZW1haWw6");
             telegramBotCore.getNewsletterHandler().addToWaitingForEmail(chatId);
         } else if (text.equalsIgnoreCase("/logo")) {
-            telegramBotCore.sendImageAsFile(chatId, "src/main/resources/logo.jpg");
+            telegramBotCore.sendImageAsFile(chatId, "/root/logo.jpg");
         }
     }
 

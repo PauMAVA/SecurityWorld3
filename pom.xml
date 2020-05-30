@@ -30,9 +30,22 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>me.PauMAVA.SecurityWorld3.SC3</mainClass>
+                        </manifest>
+                    </archive>
                     <descriptorRefs>jar-with-dependencies</descriptorRefs>
-                    <goal>package</goal>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -7,10 +7,7 @@ import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import me.PauMAVA.SecurityWorld3.mail.NewsletterHandler;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class TelegramBotCore {
 
@@ -30,7 +27,11 @@ public class TelegramBotCore {
     private void listenForUpdates() {
         this.telegramBot.setUpdatesListener(updates -> {
             for (Update update: updates) {
-                updateHandler.parseUpdate(update);
+                try {
+                    updateHandler.parseUpdate(update);
+                } catch (Exception e) {
+                    System.out.println("Bad update. Skipping....");
+                }
             }
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
@@ -44,20 +45,6 @@ public class TelegramBotCore {
     void sendImageAsFile(long chatId, String fileName) {
         SendDocument sendDocument = new SendDocument(chatId, new File(fileName));
         telegramBot.execute(sendDocument);
-    }
-
-    private byte[] toByteArray(InputStream in) {
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            while((in.read(buffer)) != -1) {
-                bos.write(buffer);
-            }
-            return bos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new byte[0];
-        }
     }
 
     NewsletterHandler getNewsletterHandler() {

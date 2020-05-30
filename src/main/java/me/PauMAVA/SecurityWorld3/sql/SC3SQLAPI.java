@@ -1,6 +1,5 @@
 package me.PauMAVA.SecurityWorld3.sql;
 
-import java.awt.font.FontRenderContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +10,7 @@ public class SC3SQLAPI {
     private static final String USER = "apiuser";
     private static final String PASSWORD = "Ad5Sv7Dsrmps7P=3^$2dz3gBsR8ZL8D9";
 
-    private static final String HOST = "192.168.1.177";
+    private static final String HOST = "127.0.0.1";
     private static final String PORT = "3306";
 
     private static final String DATABASE = "sc3";
